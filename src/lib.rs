@@ -5,8 +5,8 @@ pub fn get_instructions(content: String) -> String {
     let mut out: String = "".to_string();
     let lines: Vec<&str> = content.split("\n").collect();
     for line in lines {
-        if !line.starts_with("#") && !line.starts_with("!") {
-            out = out + line;
+        if !line.starts_with("#") {
+            out = out + line+"\n";
         }
     }
     return out;

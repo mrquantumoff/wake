@@ -1,24 +1,43 @@
 use crate::*;
 
-pub fn run_bash(command: String) {
+pub fn run_bash(command: String, debug: String) {
     println!("{} {}", "Executing".bright_yellow(), command.bright_blue());
     let lines: Vec<&str> = command.split("\n").collect();
     for line in lines {
-        if line.contains(" && ") || line.contains(" | ") || line.contains(" >> ") || line == "" {
+        if line.contains(" && ") || line.contains(" | ") || line.contains(" >> ") {
             println!(
                 "{}",
                 "Some bash syntax is not supported skipping the line!".bright_red()
             )
-        } else {
+        }
+        else if line == "" {
+            
+        } 
+        else {
             let words: Vec<&str> = line.split_whitespace().collect();
-            let cmd = words[0];
+            #[allow(unused_assignments)]
+            let mut cmd = "";
+            if words.len() == 0 {
+                cmd = line;
+            }
+            else {
+                cmd = words[0];
+            }
             let wrd = 0;
             let mut args: String = "".to_string();
+            let w = words.clone();
+            if debug == "yes" {
+                println!("{}", w.len().to_string().bright_yellow());
+            }
             for word in words {
                 if wrd == 0 && word == cmd {
                     continue;
-                } else {
+                }
+                else if wrd==w.len() {
                     args = args + word;
+                }
+                else {
+                    args = args+word+" ";
                 }
             }
             let out = std::process::Command::new(cmd)
