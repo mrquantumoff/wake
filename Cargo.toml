@@ -1,0 +1,15 @@
+[package]
+name = "wake"
+version = "0.1.0"
+edition = "2021"
+description = "Rust-written Make alternative"
+license = "BSD-2-Clause"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies.clap]
+version = "3.1.12"
+features = ["cargo"]
+
+[dependencies]
+colored = "2.0.0"
+
