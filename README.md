@@ -19,5 +19,5 @@ Right now you can build the app just from source.
 * ```mkdir .wake```
 * ```touch WakeFileList```
 * ```touch .wake/main.Wakefile```
-* fill .wake/main.Wakefile with your build instructions
-* fill WakeFileList with the .Wakefile(s) you want to build (if the file is in .wake folder, just put the name of the file + .Wakefile)
+* fill ```.wake/main.Wakefile``` with your build instructions
+* fill ```WakeFileList``` with the .Wakefile(s) you want to build (if the file is in .wake folder, just put the name of the file + .Wakefile)
