@@ -65,6 +65,18 @@ fn main() {
             std::process::exit(1);
         }
         fs::File::create(new.to_string() + sep + ".wake" + sep + "main.Wakefile").unwrap();
+        
+        if os == "LINUX" {
+            if fs::metadata("/bin/git").is_ok() {
+                println!("{}", "Git repo initialized!".bright_green());
+                #[allow(unused_variables)]
+                let out = process::Command::new("/bin/git")
+                    .arg("init")
+                    .arg(new)
+                    .output()
+                    .expect("Failed to initialize git repository");
+            }             
+        }
         println!("{}", "Project created!".bright_green());
     } else {
         if fs::metadata(source).is_ok() {
@@ -78,7 +90,7 @@ fn main() {
                 println!("{}", raw);
                 let os = lib::get_os();
                 if os == "WINDOWS" {
-                    println!("{}", "Running on Windows".bright_blue());
+                    println!("{}", "Windows support isn't ready yet".bright_red());
                 } else if os == "LINUX" {
                     println!("{}", "Running on GNU/Linux".bright_green());
                     linux::run_bash(raw, debug.to_string());
@@ -99,7 +111,7 @@ fn main() {
                     println!("{}", w);
                     let os = lib::get_os();
                     if os == "WINDOWS" {
-                        println!("{}", "Running on Windows".bright_blue());
+                        println!("{}", "Windows support isn't ready yet".bright_red());
                     } else if os == "LINUX" {
                         println!("{}", "Running on GNU/Linux".bright_green());
                         linux::run_bash(w, debug.to_string());
