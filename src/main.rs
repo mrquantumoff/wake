@@ -35,24 +35,18 @@ fn main() {
         )
         .arg(
             arg!(
-                -l --lang <LANGUAGE> "Language"
+                -l --lang <LANGUAGE> "Language for the new project (warning: does nothing when you don't use it with -n or --new)"
             )
             .required(false)
             .allow_invalid_utf8(false)
-            .default_value("none")
-            .requires("new")
-            .possible_values(&["rust", "c", "c++", "python", "dotnet", "none"]),
-        )
-        .group(
-            ArgGroup::new("project")
-                .required(false)
-                .arg("new")
-                .arg("lang"),
+            .default_value("rust")
+            .possible_values(&["rust", "python", "dotnet", "other"]),
         )
         .get_matches();
     let source = matches.value_of("source").unwrap();
     let debug = matches.value_of("debug").unwrap();
     let new = matches.value_of("new").unwrap();
+    let lang = matches.value_of("lang").unwrap();
     if new != "!WAKENOPROJECT!" {
         // Create a new project
         // Create a new path
@@ -82,7 +76,37 @@ fn main() {
             std::process::exit(1);
         }
         fs::File::create(new.to_string() + sep + ".wake" + sep + "main.Wakefile").unwrap();
-        
+        match lang {
+            "rust" => {
+                // run cargo init
+                let cmd = process::Command::new("cargo")
+                    .arg("init")
+                    .arg(new)
+                    .output()
+                    .expect("Failed to create a rust project");
+                println!("{}", String::from_utf8_lossy(&cmd.stdout));
+            }
+            "other" => {
+                fs::create_dir(new.to_string() + sep + "src").unwrap();
+            }
+            "python" => {
+                fs::create_dir(new.to_string() + sep + "src").unwrap();
+                fs::File::create(new.to_string() + sep + "src"+sep+"main.py").unwrap();
+            }
+            "dotnet" => {
+                env::set_current_dir(new).unwrap();
+                let cmd = process::Command::new("dotnet")
+                    .arg("new")
+                    .arg("console")
+                    .output()
+                    .expect("Failed to create a dotnet project");
+                println!("{}", String::from_utf8_lossy(&cmd.stdout));
+            }
+            &_ => {
+                println!("{}", "Language not supported yet".bright_red());
+                process::exit(1);
+            }
+        }
         if os == "LINUX" {
             if fs::metadata("/bin/git").is_ok() {
                 println!("{}", "Git repo initialized!".bright_green());
