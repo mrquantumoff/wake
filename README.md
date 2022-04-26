@@ -8,6 +8,7 @@ Right now you can build the app just from source.
 * ```su -c 'install -Dm755 -t /bin/ target/debug/wake && chmod +x /bin/wake'```
 ### Installation from source with existing ```wake``` binary
 * ```wake```
+* ```wake -s .wake/install.Wakefile```
 ### Installation from source via ```make```
 * ```make```
 * ```make install```
