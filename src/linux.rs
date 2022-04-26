@@ -1,7 +1,6 @@
 use crate::*;
 
 pub fn run_bash(command: String, debug: String) {
-    
     let lines: Vec<&str> = command.split("\n").collect();
     for line in lines {
         if line.contains(" && ") || line.contains(" | ") || line.contains(" >> ") {
@@ -9,19 +8,15 @@ pub fn run_bash(command: String, debug: String) {
                 "{}",
                 "Some bash syntax is not supported skipping the line!".bright_red()
             )
-        }
-        else if line == "" {
-            
-        } 
-        else {
+        } else if line == "" {
+        } else {
             println!("{} {}", "Executing".bright_yellow(), line.bright_blue());
             let words: Vec<&str> = line.split_whitespace().collect();
             #[allow(unused_assignments)]
             let mut cmd = "";
             if words.len() == 0 {
                 cmd = line;
-            }
-            else {
+            } else {
                 cmd = words[0];
             }
             let wrd = 0;
@@ -33,12 +28,10 @@ pub fn run_bash(command: String, debug: String) {
             for word in words {
                 if wrd == 0 && word == cmd {
                     continue;
-                }
-                else if wrd==w.len() {
+                } else if wrd == w.len() {
                     args = args + word;
-                }
-                else {
-                    args = args+word;
+                } else {
+                    args = args + word;
                 }
             }
             let out = std::process::Command::new(cmd)
