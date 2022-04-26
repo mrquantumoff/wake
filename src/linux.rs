@@ -1,6 +1,6 @@
 use crate::*;
 
-pub fn run_bash(command: String, debug: String) {
+pub fn run_bash(command: String, _debug: String) {
     let lines: Vec<&str> = command.split("\n").collect();
     for line in lines {
         if line.contains(" && ") || line.contains(" | ") || line.contains(" >> ") {
