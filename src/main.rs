@@ -17,7 +17,7 @@ fn main() {
         )
         .arg(
             arg!(
-                --debug <BOOL> "Show debug info"
+                --debug <yes_or_no> "Show debug info"
             )
             .required(false)
             .allow_invalid_utf8(false)
@@ -30,7 +30,24 @@ fn main() {
             )
             .required(false)
             .allow_invalid_utf8(false)
+            .requires("lang")
             .default_value("!WAKENOPROJECT!"),
+        )
+        .arg(
+            arg!(
+                -l --lang <LANGUAGE> "Language"
+            )
+            .required(false)
+            .allow_invalid_utf8(false)
+            .default_value("none")
+            .requires("new")
+            .possible_values(&["rust", "c", "c++", "python", "dotnet", "none"]),
+        )
+        .group(
+            ArgGroup::new("project")
+                .required(false)
+                .arg("new")
+                .arg("lang"),
         )
         .get_matches();
     let source = matches.value_of("source").unwrap();
