@@ -1,1 +1,1 @@
-su -c 'install -Dm755 -t /bin/ target/debug/wake && chmod +x /bin/wake'
+su -c 'install -Dm755 -t /bin/ target/debug/wake ; chmod +x /bin/wake'

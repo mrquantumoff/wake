@@ -11,31 +11,9 @@ pub fn run_bash(command: String, debug: String) {
         } else if line == "" {
         } else {
             println!("{} {}", "Executing".bright_yellow(), line.bright_blue());
-            let words: Vec<&str> = line.split_whitespace().collect();
-            #[allow(unused_assignments)]
-            let mut cmd = "";
-            if words.len() == 0 {
-                cmd = line;
-            } else {
-                cmd = words[0];
-            }
-            let wrd = 0;
-            let mut args: String = "".to_string();
-            let w = words.clone();
-            if debug == "yes" {
-                println!("{}", w.len().to_string().bright_yellow());
-            }
-            for word in words {
-                if wrd == 0 && word == cmd {
-                    continue;
-                } else if wrd == w.len() {
-                    args = args + word;
-                } else {
-                    args = args + word;
-                }
-            }
-            let out = std::process::Command::new(cmd)
-                .arg(args)
+            let out = std::process::Command::new("bash")
+                .arg("-c")
+                .arg(line)
                 .status()
                 .expect("The program failed");
             if out.success() {

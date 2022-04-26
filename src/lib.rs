@@ -23,17 +23,6 @@ pub fn get_wakefiles(content: String) -> Vec<String> {
     return wakefiles;
 }
 
-pub fn get_instructions(content: String) -> String {
-    let mut out: String = "".to_string();
-    let lines: Vec<&str> = content.split("\n").collect();
-    for line in lines {
-        if !line.starts_with("#") {
-            out = out + line + "\n";
-        }
-    }
-    return out;
-}
-
 pub fn get_os() -> String {
     if fs::metadata("/etc/os-release").is_ok() {
         return "LINUX".to_string();

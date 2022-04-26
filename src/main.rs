@@ -71,18 +71,17 @@ fn main() {
             if source.ends_with(".Wakefile") {
                 let raw = fs::read_to_string(source).unwrap();
                 let r = raw.clone();
-                let instructions = lib::get_instructions(raw);
                 if debug == "yes" {
-                    println!("{}", instructions.bright_yellow());
+                    println!("{}", raw.bright_yellow());
                     println!("{}", r.bright_red());
                 }
-                println!("{}", instructions);
+                println!("{}", raw);
                 let os = lib::get_os();
                 if os == "WINDOWS" {
                     println!("{}", "Running on Windows".bright_blue());
                 } else if os == "LINUX" {
                     println!("{}", "Running on GNU/Linux".bright_green());
-                    linux::run_bash(instructions, debug.to_string());
+                    linux::run_bash(raw, debug.to_string());
                 } else {
                     println!("{}", "Unknown OS, aborting!!!".bright_red());
                     process::exit(1);
@@ -93,18 +92,17 @@ fn main() {
                 for wakefile in wakefiles {
                     let w = fs::read_to_string(wakefile).unwrap();
                     let rr = w.clone();
-                    let instructions = lib::get_instructions(w);
                     if debug == "yes" {
-                        println!("{}", instructions.bright_yellow());
+                        println!("{}", w.bright_yellow());
                         println!("{}", rr.bright_red());
                     }
-                    println!("{}", instructions);
+                    println!("{}", w);
                     let os = lib::get_os();
                     if os == "WINDOWS" {
                         println!("{}", "Running on Windows".bright_blue());
                     } else if os == "LINUX" {
                         println!("{}", "Running on GNU/Linux".bright_green());
-                        linux::run_bash(instructions, debug.to_string());
+                        linux::run_bash(w, debug.to_string());
                     } else {
                         println!("{}", "Unknown OS, aborting!!!".bright_red());
                         process::exit(1);
