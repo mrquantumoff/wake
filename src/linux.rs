@@ -1,7 +1,7 @@
 use crate::*;
 
 pub fn run_bash(command: String, debug: String) {
-    println!("{} {}", "Executing".bright_yellow(), command.bright_blue());
+    
     let lines: Vec<&str> = command.split("\n").collect();
     for line in lines {
         if line.contains(" && ") || line.contains(" | ") || line.contains(" >> ") {
@@ -14,6 +14,7 @@ pub fn run_bash(command: String, debug: String) {
             
         } 
         else {
+            println!("{} {}", "Executing".bright_yellow(), line.bright_blue());
             let words: Vec<&str> = line.split_whitespace().collect();
             #[allow(unused_assignments)]
             let mut cmd = "";
@@ -37,7 +38,7 @@ pub fn run_bash(command: String, debug: String) {
                     args = args + word;
                 }
                 else {
-                    args = args+word+" ";
+                    args = args+word;
                 }
             }
             let out = std::process::Command::new(cmd)
