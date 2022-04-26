@@ -12,6 +12,9 @@ Right now you can build the app just from source.
 ### Installation from source via ```make```
 * ```make```
 * ```make install```
+### Installation on Arch Linux/Arch based distros
+* Available on [AUR](https://aur.archlinux.org/packages/wake-build-git/).
+
 
 ## Creating a new wake project
 * ```wake -n <project_name>```
