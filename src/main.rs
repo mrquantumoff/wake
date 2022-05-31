@@ -132,7 +132,7 @@ fn main() {
                 println!("{}", raw);
                 let os = lib::get_os();
                 if os == "WINDOWS" {
-                    println!("{}", "Windows support isn't stable yet".bright_yellow());
+                    println!("{}", "Running on Windows".bright_green());
                     lib::windows::run_pwsh(raw, &debug.to_string());
                 } else if os == "LINUX" {
                     println!("{}", "Running on GNU/Linux".bright_green());
@@ -151,10 +151,11 @@ fn main() {
                     println!("{}", "Got wakefiles".bright_yellow());
                 }
                 for wakefile in wakefiles {
-                    if debug=="yes" {println!("{}", &wakefile.to_str().unwrap());}
+                    if debug=="yes" {println!("\"{}\"", &wakefile.to_str().unwrap());}
                     let mut raw = File::open(&wakefile).expect("Failed to open file");
                     let mut _w = String::new();
-                    raw.read_to_string(&mut _w).expect("Failed to read file");
+                    _w = _w.trim().to_string();
+                    raw.read_to_string(&mut _w).expect("Failed to read file"); 
                     lib::run_unified(_w, debug.to_string());
                 }
             } else {

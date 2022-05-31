@@ -6,11 +6,13 @@ use std::{fs, path, process};
 pub fn run_unified(command: String, _debug: String) {
     let os = get_os();
     if os == "WINDOWS" {
+        println!("{}", "Running on Windows".bright_green());
         windows::run_pwsh(command, &_debug);
     } else if os == "LINUX" {
+        println!("{}", "Running on GNU/Linux".bright_green());
         linux::run_bash(command, _debug);
     } else {
-        println!("{}", "Error: OS not supported!".bright_red());
+        println!("{}", "Unknown OS, aborting!".bright_red());
         process::exit(1);
     }
 }
@@ -21,7 +23,7 @@ pub fn get_wakefiles(content: String) -> Vec<PathBuf> {
     for line in lines {
         if line.contains(".Wakefile") {
             //let fin = ".wake".to_string() + sep + line;
-            let fin = path::Path::new(".wake").join(line);
+            let fin = path::Path::new(".wake").join(line.trim());
             wakefiles.push(fin);
         } else {
             println!("{}", "Warning: not a Wakefile!".yellow());
