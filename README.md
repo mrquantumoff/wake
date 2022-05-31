@@ -17,8 +17,7 @@ Right now you can build the app just from source.
 
 
 ## Creating a new wake project
-* ```wake -n <project_name> -l <language>```
-* Note: default language is ```rust```
+* ```wake new -n <project_name> -l <language>```
 
 ## Configuring ```wake``` for an existing project
 * ```mkdir .wake```
