@@ -1,10 +1,9 @@
 #[allow(unused_imports)]
 use clap::*;
 use colored::*;
-use std::{env, fs, process};
+use std::{env, fs, path, process, fs::File, io::Read};
 mod lib;
-mod linux;
-mod windows;
+
 fn main() {
     let matches = command!()
         .arg(
@@ -57,25 +56,25 @@ fn main() {
         }
         // Create a new file
         let os = lib::get_os();
-        let mut sep = "";
-        if os == "WINDOWS" {
-            sep = "\\";
-        } else if os == "LINUX" {
-            sep = "/";
-        }
-        fs::File::create(new.to_string() + sep + "WakeFileList").unwrap();
-        let wr = fs::write(new.to_string() + sep + "WakeFileList", "main.Wakefile");
+        let fpath = path::Path::new(new).join("WakeFileList");
+        fs::File::create(&fpath).unwrap();
+        let wr = fs::write(&fpath, "main.Wakefile");
         if wr.is_err() {
             println!("{}", "Error: could not create the project!".bright_red());
             process::exit(1);
         }
         // Create .wake folder
-        let tpath = fs::create_dir(new.to_string() + sep + ".wake");
+        let ffpath = path::Path::new(new).join(".wake");
+        if debug == "yes" {
+            println!("{}", ffpath.to_str().unwrap().bright_yellow());
+        }
+        let tpath = fs::create_dir(&ffpath);
         if !tpath.is_ok() {
             println!("{}", "Failed to create .wake folder".bright_red());
             std::process::exit(1);
         }
-        fs::File::create(new.to_string() + sep + ".wake" + sep + "main.Wakefile").unwrap();
+        let mpath = ffpath.join("main.Wakefile");
+        fs::File::create(mpath).unwrap();
         match lang {
             "rust" => {
                 // run cargo init
@@ -87,11 +86,13 @@ fn main() {
                 println!("{}", String::from_utf8_lossy(&cmd.stdout));
             }
             "other" => {
-                fs::create_dir(new.to_string() + sep + "src").unwrap();
+                let p = path::Path::new(new).join("src");
+                fs::create_dir(p).unwrap();
             }
             "python" => {
-                fs::create_dir(new.to_string() + sep + "src").unwrap();
-                fs::File::create(new.to_string() + sep + "src"+sep+"main.py").unwrap();
+                let p = path::Path::new(new).join("src");
+                fs::create_dir(&p).unwrap();
+                fs::File::create(p.join("main.py")).unwrap();
             }
             "dotnet" => {
                 env::set_current_dir(new).unwrap();
@@ -116,7 +117,7 @@ fn main() {
                     .arg(new)
                     .output()
                     .expect("Failed to initialize git repository");
-            }             
+            }
         }
         println!("{}", "Project created!".bright_green());
     } else {
@@ -131,35 +132,30 @@ fn main() {
                 println!("{}", raw);
                 let os = lib::get_os();
                 if os == "WINDOWS" {
-                    println!("{}", "Windows support isn't ready yet".bright_red());
+                    println!("{}", "Windows support isn't stable yet".bright_yellow());
+                    lib::windows::run_pwsh(raw, &debug.to_string());
                 } else if os == "LINUX" {
                     println!("{}", "Running on GNU/Linux".bright_green());
-                    linux::run_bash(raw, debug.to_string());
+                    lib::linux::run_bash(raw, debug.to_string());
                 } else {
-                    println!("{}", "Unknown OS, aborting!!!".bright_red());
+                    println!("{}", "Unknown OS, aborting!".bright_red());
                     process::exit(1);
                 }
             } else if source == "WakeFileList" {
+                if debug == "yes" {
+                    println!("{}", "WakeFileList is the default file".bright_yellow());
+                }
                 let raw = fs::read_to_string(source).unwrap();
                 let wakefiles = lib::get_wakefiles(raw);
+                if debug == "yes" {
+                    println!("{}", "Got wakefiles".bright_yellow());
+                }
                 for wakefile in wakefiles {
-                    let w = fs::read_to_string(wakefile).unwrap();
-                    let rr = w.clone();
-                    if debug == "yes" {
-                        println!("{}", w.bright_yellow());
-                        println!("{}", rr.bright_red());
-                    }
-                    println!("{}", w);
-                    let os = lib::get_os();
-                    if os == "WINDOWS" {
-                        println!("{}", "Windows support isn't ready yet".bright_red());
-                    } else if os == "LINUX" {
-                        println!("{}", "Running on GNU/Linux".bright_green());
-                        linux::run_bash(w, debug.to_string());
-                    } else {
-                        println!("{}", "Unknown OS, aborting!!!".bright_red());
-                        process::exit(1);
-                    }
+                    if debug=="yes" {println!("{}", &wakefile.to_str().unwrap());}
+                    let mut raw = File::open(&wakefile).expect("Failed to open file");
+                    let mut _w = String::new();
+                    raw.read_to_string(&mut _w).expect("Failed to read file");
+                    lib::run_unified(_w, debug.to_string());
                 }
             } else {
                 println!("{}", "Not a Wakefile!".bright_red());
