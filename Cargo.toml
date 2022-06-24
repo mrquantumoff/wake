@@ -1,9 +1,13 @@
 [package]
-name = "wake"
+name = "wake-build"
 version = "0.1.0"
 edition = "2021"
 description = "Rust-written Make alternative"
 license = "BSD-2-Clause"
+
+[[bin]]
+name = "wake"
+path = "src/main.rs"
 
 [lib]
 name = "wakelib"
