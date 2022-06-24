@@ -3,9 +3,13 @@ Wake is a rust written "make" alternative.
 
 ## Installation from source
 Right now you can build the app just from source.
-### Installation via ```cargo```
+### Installation via ```cargo``` (git)
+* clone the repo and ```cd``` in it
 * ```cargo build -r``` and ```su -c 'install -Dm755 -t /bin/ target/release/wake && chmod +x /bin/wake'``` for global installation on GNU+Linux
 * ```cargo install --path .``` for local installation on Windows/GNU+Linux
+
+### Installation via ```cargo``` (release)
+* ```cargo install wake``` for local installation on Windows/GNU+Linux
 ### Installation from source with existing ```wake``` binary on GNU+Linux
 * ```wake```
 * ```wake -s .wake/install.Wakefile```
